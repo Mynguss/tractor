@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<style>
+body {
+
+	background-color: white; /*hsl(30,20%, 95%);*/
+	width:95%;
+	font-family: 'the_sans_black-regular',Verdana,"Times New Roman",Times,serif;
+}
+h1 {
+   margin-left:260px;
+	font-size: 3em;
+	font-weight:bold;
+  color:#4A4245;
+  font-family: 'the_sans_black-regular',Verdana,"Times New Roman",Times,serif;
+
+}
+h2 {
+	color:white;
+	border:solid 2px #DB8714;
+	background-color: #DB8714;
+	margin-left:60px;
+	padding-left:5px;	
+	font-size: 1.5em;
+	text-transform: uppercase;
+  border-radius:4px;
+}
+h3 {
+  color:white;
+  border:solid 2px #8E888D;
+  background-color: #8E888D;
+  margin-left:100px;
+  padding-left:5px;
+  font-size: 1.2em;
+  border-radius:4px;
+}
+
+h3.header{
+    color:white;
+  border:solid 2px #8E888D;
+  background-color: #8E888D;
+  margin-left:100px;
+  padding-left:5px;
+  font-size: 1.2em;
+  border-radius:4px;
+}
+h4 {
+	color:white;
+	border:solid 2px #64A988;
+	background-color: #64A988;
+	margin-left:140px;
+	padding-left:5px;
+	font-size: 1.1em;
+  border-radius:4px;
+}
+h5 {
+  color:white;
+  border:solid 2px #9460A2;
+  background-color: #9460A2;
+  margin-left:180px;
+  padding-left:5px;
+  font-size: 1em;
+  border-radius:4px;
+}
+
+.review{
+  background-color: red;
+  border:solid 2px red;
+}
+
+.notimplemented{
+  border:dashed 2px white;
+}
+
+div svg.railroad-diagram {
+	width: 96.5%;  /* Scale to the width of the parent */
+	height: 100%;  /* Preserve the ratio. Could be related to https://bugs.webkit.org/show_bug.cgi?id=82489 */
+  margin-left:60px;
+  background-color: #dddddd;
+}
+
+.square {
+  margin-left:60px;
+  background: black;
+  color:white;
+  padding:4px;
+  margin-bottom: -20px;
+}
+
+svg.railroad-diagram {
+	
+}
+
+
+tractor
+{
+  padding:10px;
+  display: inline-block;
+  border-radius: 5px;
+  margin:0;
+  white-space: pre;
+  background-color: #333;
+  color: white;
+  clear: float;
+}
+
+
+</style>
+<link rel='stylesheet' href='railroad-diagrams.css'>
+<script src='railroad-diagrams.js'></script>
+<body>
+<div style="display:inline;">
+  <img src="http://cdn2.hubspot.net/hub/383037/file-659565343-png/Image/datashaka.png?t=1421148150818" style="float:left;  margin-left:60px;" />
+<h1 id='ident'>Tractor : a scripting language for moving data </h1>
+</div>
+<br/>
+
+<div>
+<script >
+Diagram(
+ZeroOrMore(
+  Choice(0, 
+    Sequence(NonTerminal('DIRECTIVE'), Optional(NonTerminal('COMMENT'))),
+    Sequence( NonTerminal('COMMENT')) ,
+    Sequence( NonTerminal('VARIABLE DECLARATION'), Optional(NonTerminal('COMMENT')))
+    )
+    
+  ),
+
+
+    OneOrMore(
+      Choice(0, 
+        Sequence(NonTerminal('STATEMENT')),
+        Sequence(NonTerminal('COMMENT')),
+        Sequence(NonTerminal('STATEMENT'),NonTerminal('COMMENT')))
+)
+).addTo();
+</script>
+</div>
+<br/>
+<b style="margin-left:60px"> Legend</b>
+<p style="margin-left:60px;border:solid 3px black;padding:3px;border-radius:5px">
+<br/><br/><br/>
+<span class="square notimplemented">Not implemented feature</span><br/>
+<script>
+Diagram(
+   Terminal('Keyword')
+).format(20,20,20,60).addTo();
+Diagram(
+   NonTerminal('EOL'), Comment('End of line')
+).format(20,20,20,60).addTo();
+Diagram(
+   NonTerminal('User input')
+).format(20,20,20,60).addTo();
+Diagram(
+   NonTerminal('CONCEPTUAL ELEMENT')
+).format(20,20,20,60).addTo();
+</script>
+</p>
+
+
+
+
+<!--DIRECTIVE-->
+<h2 id='at-keyword'>Directive</h2>
+<script>
+Diagram(
+   Terminal('!'),
+   Terminal('with'),
+   Choice(1,
+      Sequence(Terminal('files in'), NonTerminal('directory')) ,
+      Terminal('memory')), Terminal('EOL')
+).format(20,20,20,60).addTo();
+</script>
+<!--COMMENT-->
+<h2 id='function'>Comment</h2>
+
+<h3 id='function'>Single line</h3>
+<script>
+Diagram(
+      Sequence(
+         Terminal('#') ,
+         Optional(NonTerminal('string literal')), 
+         Terminal('EOL'))
+).format(20,20,20,100).addTo();
+</script>
+<h3 id='function' class='notimplemented'>Multi line</h3>
+<script>
+Diagram(
+      Sequence(
+         Terminal('<#'),
+         ZeroOrMore(NonTerminal('string literal'),Terminal('EOL')),
+         Terminal('#>')
+)
+).format(20,20,20,100).addTo();
+</script>
+<!--VARIABLE-->
+<h2 id='function' class='notimplemented'>Variable DECLARATION</h2>
+<script>
+Diagram(Terminal('$'),NonTerminal('variable name'),Terminal('='), NonTerminal('value'), Terminal('EOL')).format(20,20,20,60).addTo();
+</script>
+
+
+<!--STATEMENT-->
+<h2 id='function'>Statement</h2>
+<script>
+Diagram(
+  ZeroOrMore(NonTerminal('PACKAGE')),
+  Terminal('~>'),
+  OneOrMore(
+     Sequence(Choice(1, NonTerminal('KEYWORD'),NonTerminal('VERB')),
+     ZeroOrMore(NonTerminal('PARAMETER'))
+   )),
+  Terminal('~>'),
+     ZeroOrMore(NonTerminal('PACKAGE'))
+)
+.format(20,20,20,60).addTo();
+</script>
+
+
+<!--PACKAGE-->
+<h3 id='function'>Package</h3>
+<script>
+Diagram(
+  Choice(4,
+    Sequence(NonTerminal('RAW'), Comment('Raw data')),
+    Sequence(NonTerminal('DATA'),Comment('TCSV data')),
+    Sequence(NonTerminal('PAIR'),Comment('Containing data & meta data')),
+    Sequence(NonTerminal('GROUP'),Comment('Key-Value dictionnary of packages')),
+    //Sequence(NonTerminal('RULES'),Comment('???')),
+    Sequence(NonTerminal('ENRICHMENT'),Comment('Enrichment rules')),
+    Sequence(NonTerminal('COMPLETE'),Comment('Status dictionnary for completed packages')),
+    Sequence(NonTerminal('IGNORED'),Comment('Ignored package')),
+    Sequence(NonTerminal('ERROR'),Comment('Status dictionnary for packages in error')),
+    Sequence(NonTerminal('SUCCESS'),Comment('Status dictionnary for suceeded packages')),
+    Sequence(NonTerminal('HELD'),Comment('Status dictionnary for held packages')),
+    Sequence(NonTerminal('RESULT'),Comment('Raw data'))
+    )
+)
+.format(20,20,20,100).addTo();
+
+</script>
+
+
+<!--PARAMETERS-->
+<h3 id='function'>Parameter</h3>
+<script>
+Diagram(
+
+    Choice(0,
+       Sequence(
+            Optional(Choice(0,Terminal('\''),Terminal('\"'))),
+            NonTerminal('Constant'),
+            Optional(Choice(0,Terminal('\''),Terminal('\"'))) 
+       ),
+       NonTerminal('VARIABLE')
+   )
+
+)
+.format(20,20,20,140).addTo();
+</script>
+
+<!--KEYWORDS-->
+<h3 class='header'>Keywords</h3>
+<h4 id='function'>SYNTAX NOT FINALIZED</h4>
+<h5 id='function'>group by</h5>
+<h5 id='function'>first</h5>
+<h5 id='function'>last</h5>
+<h5 id='function'>only</h5>
+<h5 id='function'>returns</h5>
+<h5 id='function'>time (as in 'pad time')</h5>
+
+<h3 class='header'>Verbs</h3>
+<!--SYNTAX NOT FINALIZED-->
+<h4 id='function'>SYNTAX NOT FINALIZED</h4>
+<h5 class='header'>select</h5>
+<h5 id='function'>calculate</h5>
+<h5 id='function'>sort</h5>
+<h5 id='function'>pad</h5>
+<h5 id='function'>average</h5>
+<h5 id='function'>roll</h5>
+<!--ACQUISITION-->
+<h4 id='function'>Acquisition</h4>
+<script>
+Diagram(
+  
+     Sequence(NonTerminal('VERB'),
+     ZeroOrMore(NonTerminal('PARAMETER'))
+   ),
+  Terminal('~>'),
+     OneOrMore(NonTerminal('PACKAGE'))
+
+)
+.format(20,20,20,140).addTo();
+</script>
+
+          <h5>Harvest</h5>
+          <script>
+          Diagram(
+            Terminal('harvest'),
+             
+               Choice(0,Sequence(Terminal('GET'),NonTerminal('URL'))
+
+             ),
+            Terminal('~>'),
+               OneOrMore(NonTerminal('RAW'))
+
+          )
+          .format(20,20,20,180).addTo();
+          </script>
+          <br/>
+          <tractor>$url = http://www.goodapi.com/getdata<br/>harvest GET $url ~> save raw.csv</tractor>
+
+           <h5 class="notimplemented">Query</h5>
+          <script>
+          Diagram(
+            Terminal('query'),
+             
+               NonTerminal('Query parameters'),
+            Terminal('~>'),
+               OneOrMore(NonTerminal('RAW'))
+
+          )
+          .format(20,20,20,180).addTo();
+          </script>
+
+           <h5 class="notimplemented">Get</h5>
+          <script>
+          Diagram(
+            Terminal('get'),
+             NonTerminal('Package name'),
+            Terminal('~>'),
+              Choice(0, NonTerminal('DATA'), NonTerminal('RAW'))
+
+          )
+          .format(20,20,20,180).addTo();
+          </script>
+
+
+
+
+<!--MANIPULATION-->
+<h4 id='function'>Manipulation</h4>
+<script>
+Diagram(
+  OneOrMore(NonTerminal('PACKAGE')),
+  Terminal('~>'),
+
+     Sequence(NonTerminal('VERB'),
+     ZeroOrMore(NonTerminal('PARAMETER'))
+   ),
+  Terminal('~>'),
+     OneOrMore(NonTerminal('PACKAGE'))
+
+)
+.format(20,20,20,140).addTo();
+</script>
+
+
+            <h5>Parse</h5>
+            <script>
+            Diagram(
+            OneOrMore(NonTerminal('RAW')),
+            Terminal('~>'),
+            Terminal('parse'),
+            Choice(0, Terminal('CSV')),
+            OneOrMore(
+                Choice(2, Terminal('T'),Terminal('C'),Terminal('S'),Terminal('V'))
+
+            ),
+            Terminal('~>'),
+            OneOrMore(NonTerminal('DATA'))
+            )
+            .format(20,20,20,180).addTo();
+            </script>
+
+            <h5>Combine</h5>
+            <script>
+            Diagram(
+            OneOrMore(NonTerminal('DATA')),
+            Terminal('~>'),
+            Terminal('combine'),
+            Terminal('~>'),
+            NonTerminal('DATA')
+            )
+            .format(20,20,20,180).addTo();
+            </script>
+
+            <h5>Stuff</h5>
+            <script>
+            Diagram(
+            OneOrMore(NonTerminal('RAW')),
+            Terminal('~>'),
+            Terminal('stuff'),
+            Choice(0, Terminal('CSV')),
+            NonTerminal('Column Order'),
+            NonTerminal('Header name'),
+            NonTerminal('Row value'),
+            Terminal('~>'),
+            NonTerminal('RAW')
+            )
+            .format(20,20,20,180).addTo();
+            </script>
+
+
+            <h5>Validate</h5>
+            <script>
+            Diagram(
+            OneOrMore(NonTerminal('DATA')),
+            Terminal('~>'),
+            Terminal('validate'),
+            Terminal('~>'),
+            OneOrMore('DATA')
+            )
+            .format(20,20,20,180).addTo();
+            </script>
+
+          <h5 class="notimplemented">Mill</h5>
+         <script>
+            Diagram(
+            OneOrMore(NonTerminal('DATA')),
+            Terminal('~>'),
+            Terminal('mill'),
+            Terminal('('),
+            NonTerminal('Filtering parameters'),
+            Terminal('>'),
+            NonTerminal('Action parameters'),
+             Terminal(')'),
+            Terminal('~>'),
+            OneOrMore('DATA')
+            )
+            .format(20,20,20,180).addTo();
+            </script>
+
+             <h5 class="notimplemented">Sum</h5>
+         <script>
+            Diagram(
+            OneOrMore(NonTerminal('DATA')),
+            Terminal('~>'),
+            Terminal('sum'),
+            Terminal('~>'),
+            OneOrMore('DATA')
+            )
+            .format(20,20,20,180).addTo();
+            </script>
+
+             <h5 class="notimplemented">Order</h5>
+         <script>
+            Diagram(
+            OneOrMore(NonTerminal('DATA')),
+            Terminal('~>'),
+            Terminal('order'),
+            Choice(0,
+              Sequence(Terminal('context'), NonTerminal('Order parameters')),
+              Terminal('signal'),
+              Terminal('time'),
+              Terminal('value')
+            ),  
+            
+            Terminal('~>'),
+            OneOrMore('DATA')
+            )
+            .format(20,20,20,180).addTo();
+            </script>
+
+<!--DELIVERY-->
+<h4 id='function'>Delivery</h4>
+<script>
+Diagram(
+  OneOrMore(NonTerminal('PACKAGE')),
+  Terminal('~>'),
+
+     Sequence(NonTerminal('VERB'),
+     ZeroOrMore(NonTerminal('PARAMETER'))
+   )
+
+)
+.format(20,20,20,140).addTo();
+</script>
+
+          <h5>Save</h5>
+          <script>
+          Diagram(
+          Choice(0, NonTerminal('DATA'), NonTerminal('RAW')),
+          Terminal('~>'),
+          Terminal('save'),
+          NonTerminal('Output path')
+
+          )
+          .format(20,20,20,180).addTo();
+          </script>
+
+          <h5 class="notimplemented">Bake</h5>
+          <script>
+          Diagram(
+          Choice(0, NonTerminal('DATA'), NonTerminal('RAW')),
+          Terminal('~>'),
+          Terminal('bake'),
+          Terminal('CSV'),
+          NonTerminal('Output path')
+
+          )
+          .format(20,20,20,180).addTo();
+          </script>
+
+          <h5 class="notimplemented">Hold</h5>
+          <script>
+          Diagram(
+          Choice(0, NonTerminal('DATA'), NonTerminal('RAW')),
+          Terminal('~>'),
+          Terminal('hold'),
+          NonTerminal('Package name')
+
+          )
+          .format(20,20,20,180).addTo();
+          </script>
+
+
+
+
+</body>

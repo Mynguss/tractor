@@ -1,0 +1,80 @@
+<html>
+	<head>
+		<!--<link href="styles/shThemeTractor.css" rel="stylesheet" type="text/css" />
+<script src="scripts/shCore.js" type="text/javascript"></script>
+<script src="scripts/shAutoloader.js" type="text/javascript"></script>-->
+<link href="styles/shThemeTractor.css" rel="stylesheet" type="text/css" />
+<script src="http://alexgorbatchev.com/pub/sh/current/scripts/shCore.js" type="text/javascript"></script>
+<script src="http://alexgorbatchev.com/pub/sh/current/scripts/shAutoloader.js" type="text/javascript"></script>
+
+<script>
+SyntaxHighlighter.brushes.Custom = function()
+{
+  var funcs       = 'hello parse combine harvest sort select group by difference calculate  crop mill';
+  var maths       = 'sum avg';
+  var keywords    = 'returns day month time percent adds';
+  var operators   = '';
+  var straw       = '~&gt;'
+ 
+  this.regexList = [
+      { regex: /#(.*)$/gm,                                               css: 'comments' },
+      { regex: SyntaxHighlighter.regexLib.multiLineDoubleQuotedString,    css: 'string' },
+      { regex: new RegExp(this.getKeywords(funcs), 'gmi'),                css: 'color2' },
+      { regex: new RegExp(this.getKeywords(maths), 'gmi'),                css: 'color2' },
+      //{ regex: new RegExp(this.getKeywords(operators), 'gmi'),            css: 'color1' },
+      { regex: new RegExp(this.getKeywords(keywords), 'gmi'),             css: 'keyword' },
+      { regex: new RegExp(straw, 'gmi'),                css: 'straw' }
+      ];
+};
+SyntaxHighlighter.brushes.Custom.prototype = new SyntaxHighlighter.Highlighter();
+SyntaxHighlighter.brushes.Custom.aliases  = ['custom', 'ctm', 'ct'];
+SyntaxHighlighter.all();
+
+</script>
+	</head>
+	<body>
+
+		<h1>Tractor script</h1>
+
+<pre class="brush: custom" title="Day on day calculation for cumulative signals">
+#some comments
+select {Accounts Followed} ~&gt;
+group by day ~&gt; 
+sort time ~&gt;
+difference returns {Daily Accounts Followed}
+</pre>
+
+<pre class="brush: custom" title="Engagement Rate">
+select {Daily Page Engaged Users}{Lifetime Likes} ~&gt; 
+calculate '{Daily Page Engaged Users}/{Lifetime Likes}' returns {Engagement Rate}
+</pre>
+
+<pre class="brush: custom" title="Comparison between 2 consecutive monthly average engagement rate  in %
+">
+select {Daily Page Engaged Users}{Lifetime Likes}  ~&gt; 
+calculate '{Daily Page Engaged Users}/{Lifetime Likes}' adds {Engagement Rate} ~&gt;
+group by month  ~&gt;
+avg  ~&gt;
+difference relative returns {Engagement Rate Monthly Trend} as percent
+</pre>
+
+<pre class="brush: custom" title="Share of voice">
+select {Buzz*}  ~&gt;
+crop [Brand][Market]{*} ~&gt;
+mill (S|{*}>{BuzzDenominator})  ~&gt;
+sum  ~&gt;
+calculate '{Buzz}/{BuzzDenominator}' adds {BuzzShareOfVoice}  ~&gt;
+returns [Brand][Market]{BuzzShareOfVoice}
+</pre>
+
+<pre class="brush: custom" title="Global love">
+select {Twitter Followers}{Facebook Likes}{Instagram Likes} ~&gt;
+crop [Brand][Market]{*} ~&gt; 
+group by [Brand][Market] ~&gt;
+mill ({*} > {Love}) ~&gt;
+sum 
+
+</pre>
+
+	</body>
+</html>
